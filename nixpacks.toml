@@ -1,23 +1,26 @@
+# Nixpacks configuration for Django (Daphne/Channels)
 providers = ["python"]
 
 [phases.setup]
+# নির্দিষ্ট আর্কাইভ এবং প্যাকেজ সেটআপ
 nixpkgsArchive = "bc8f8d1be58e8c8383e683a06e1e1e57893fff87"
-# এখানে python311 এর জায়গায় সরাসরি python3 ফুল প্যাকেজটি ব্যবহার করা হচ্ছে
 pkgs = ["python3", "gcc", "postgresql"]
 
 [phases.install]
-# pip নিশ্চিত করতে এবং তারপর ইন্সটল করতে এই কমান্ডগুলো ব্যবহার করুন
+# ভার্চুয়াল এনভায়রনমেন্ট তৈরি করে ডিপেন্ডেন্সি ইন্সটল করা (সবচেয়ে নিরাপদ পদ্ধতি)
 cmds = [
-    "python3 -m ensurepip",
-    "python3 -m pip install --upgrade pip",
-    "python3 -m pip install -r requirements/production.txt"
+    "python3 -m venv /app/.venv",
+    "/app/.venv/bin/pip install --upgrade pip",
+    "/app/.venv/bin/pip install -r requirements/production.txt"
 ]
 
 [phases.build]
+# স্ট্যাটিক ফাইল কালেকশন
 cmds = [
-    "DJANGO_SETTINGS_MODULE=config.settings.production python3 manage.py collectstatic --noinput"
+    "DJANGO_SETTINGS_MODULE=config.settings.production /app/.venv/bin/python manage.py collectstatic --noinput"
 ]
 
 [start]
-# মাইগ্রেশন কমান্ডটি স্টার্ট ফেজে রাখা নিরাপদ
-cmd = "python3 manage.py migrate --noinput && daphne -b 0.0.0.0 -p 8000 config.asgi:application"
+# মাইগ্রেশন এবং সার্ভার স্টার্ট
+# এখানে আপনার প্রোজেক্টের নাম 'config' ধরে নেওয়া হয়েছে (যেমন: config.asgi:application)
+cmd = "/app/.venv/bin/python manage.py migrate --noinput && /app/.venv/bin/daphne -b 0.0.0.0 -p 8000 config.asgi:application"
