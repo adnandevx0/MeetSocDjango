@@ -21,6 +21,5 @@ cmds = [
 ]
 
 [start]
-# মাইগ্রেশন এবং সার্ভার স্টার্ট
-# এখানে আপনার প্রোজেক্টের নাম 'config' ধরে নেওয়া হয়েছে (যেমন: config.asgi:application)
-cmd = "/app/.venv/bin/python manage.py migrate --noinput && /app/.venv/bin/daphne -b 0.0.0.0 -p 8000 config.asgi:application"
+# কমান্ডটি রান করার চেষ্টা করবে, ফেইল করলে কন্টেইনার সচল রেখে লগ দেখাবে
+cmd = "/app/.venv/bin/python manage.py migrate --noinput && /app/.venv/bin/daphne -b 0.0.0.0 -p 8000 config.asgi:application || tail -f /dev/null"
