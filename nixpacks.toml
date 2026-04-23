@@ -23,3 +23,7 @@ cmds = [
 [start]
 # কমান্ডটি রান করার চেষ্টা করবে, ফেইল করলে কন্টেইনার সচল রেখে লগ দেখাবে
 cmd = "/app/.venv/bin/python manage.py migrate --noinput && /app/.venv/bin/daphne -b 0.0.0.0 -p 8000 config.asgi:application || tail -f /dev/null"
+
+
+[variables]
+PORT = "8000"
