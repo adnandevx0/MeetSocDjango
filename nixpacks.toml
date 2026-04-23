@@ -1,17 +1,19 @@
 providers = ["python"]
 
 [phases.setup]
-nixpkgsArchive = "bc8f8d1be58e8c8383e683a06e1e1e57893fff87"
-pkgs = ["python311", "python311Packages.pip", "gcc", "postgresql"]
+# নির্দিষ্ট একটি ছোট আর্কাইভ বা ডিফল্ট ব্যবহার করা
+pkgs = ["python311", "python311Packages.pip", "gcc", "postgresql_16"]
 
 [phases.install]
-# সরাসরি pip এর বদলে python -m pip ব্যবহার করা বেশি নিরাপদ
-cmds = ["python3 -m pip install --upgrade pip", "python3 -m pip install -r requirements/production.txt"]
+cmds = [
+    "python3 -m pip install --upgrade pip",
+    "python3 -m pip install -r requirements/production.txt"
+]
 
 [phases.build]
+# এখানে বিল্ড টাইমে সেটিংস বলে দেওয়া ভালো
 cmds = [
-    "python3 manage.py collectstatic --noinput",
-    "python3 manage.py migrate --noinput"
+    "DJANGO_SETTINGS_MODULE=config.settings.production python3 manage.py collectstatic --noinput"
 ]
 
 [start]
