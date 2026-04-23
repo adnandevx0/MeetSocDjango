@@ -1,15 +1,17 @@
 providers = ["python"]
 
 [phases.setup]
-nixPkgs = ["python311", "gcc"]
+nixpkgsArchive = "bc8f8d1be58e8c8383e683a06e1e1e57893fff87"
+pkgs = ["python311", "python311Packages.pip", "gcc", "postgresql"]
 
 [phases.install]
-cmds = ["pip install -r requirements/production.txt"]
+# সরাসরি pip এর বদলে python -m pip ব্যবহার করা বেশি নিরাপদ
+cmds = ["python3 -m pip install --upgrade pip", "python3 -m pip install -r requirements/production.txt"]
 
 [phases.build]
 cmds = [
-    "python manage.py collectstatic --noinput",
-    "python manage.py migrate --noinput"
+    "python3 manage.py collectstatic --noinput",
+    "python3 manage.py migrate --noinput"
 ]
 
 [start]
