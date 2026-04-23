@@ -1,0 +1,41 @@
+from django.urls import path
+
+from apps.messages import views as mv
+from apps.users import views as v
+
+urlpatterns = [
+    path("auth/register/", v.RegisterView.as_view(), name="auth-register"),
+    path("auth/login/", v.LoginView.as_view(), name="auth-login"),
+    path("auth/logout/", v.LogoutView.as_view(), name="auth-logout"),
+    path("auth/token/refresh/", v.RefreshTokenView.as_view(), name="auth-token-refresh"),
+    path("auth/verify-email/send/", v.VerifyEmailSendView.as_view(), name="auth-verify-email-send"),
+    path("auth/verify-email/", v.VerifyEmailView.as_view(), name="auth-verify-email"),
+    path("auth/verify-phone/send/", v.VerifyPhoneSendView.as_view(), name="auth-verify-phone-send"),
+    path("auth/verify-phone/", v.VerifyPhoneView.as_view(), name="auth-verify-phone"),
+    path("auth/password/reset/", v.PasswordResetRequestView.as_view(), name="auth-password-reset"),
+    path("auth/password/reset/confirm/", v.PasswordResetConfirmView.as_view(), name="auth-password-reset-confirm"),
+    path("auth/social/google/", v.GoogleOAuthView.as_view(), name="auth-social-google"),
+    path("auth/social/facebook/", v.FacebookOAuthView.as_view(), name="auth-social-facebook"),
+    path("users/me/", v.MeView.as_view(), name="users-me"),
+    path("users/me/avatar/", v.AvatarUpdateView.as_view(), name="users-me-avatar"),
+    path("users/me/cover/", v.CoverUpdateView.as_view(), name="users-me-cover"),
+    path("users/online-status/", mv.OnlineStatusView.as_view(), name="online-status"),
+    path("users/blocked/", v.BlockedListView.as_view(), name="users-blocked"),
+    path("users/people-you-may-know/", v.PeopleYouMayKnowView.as_view(), name="users-pymk"),
+    path("users/<uuid:user_id>/", v.PublicProfileView.as_view(), name="users-public"),
+    path("users/<uuid:user_id>/posts/", v.UserPostsView.as_view(), name="users-posts"),
+    path("users/<uuid:user_id>/photos/", v.UserPhotosView.as_view(), name="users-photos"),
+    path("users/<uuid:user_id>/friends/", v.UserFriendsView.as_view(), name="users-friends"),
+    path("users/<uuid:user_id>/followers/", v.FollowersListView.as_view(), name="users-followers"),
+    path("users/<uuid:user_id>/following/", v.FollowingListView.as_view(), name="users-following"),
+    path("friends/request/<uuid:user_id>/", v.FriendRequestView.as_view(), name="friends-request"),
+    path("friends/accept/<uuid:user_id>/", v.FriendAcceptView.as_view(), name="friends-accept"),
+    path("friends/decline/<uuid:user_id>/", v.FriendDeclineView.as_view(), name="friends-decline"),
+    path("friends/unfriend/<uuid:user_id>/", v.FriendUnfriendView.as_view(), name="friends-unfriend"),
+    path("friends/requests/", v.FriendRequestsListView.as_view(), name="friends-requests"),
+    path("friends/suggestions/", v.FriendSuggestionsView.as_view(), name="friends-suggestions"),
+    path("friends/follow/<uuid:user_id>/", v.FollowUserView.as_view(), name="friends-follow"),
+    path("friends/unfollow/<uuid:user_id>/", v.UnfollowUserView.as_view(), name="friends-unfollow"),
+    path("users/block/<uuid:user_id>/", v.BlockUserView.as_view(), name="users-block"),
+    path("users/unblock/<uuid:user_id>/", v.UnblockUserView.as_view(), name="users-unblock"),
+]
