@@ -1,20 +1,23 @@
 providers = ["python"]
 
 [phases.setup]
-# নির্দিষ্ট একটি ছোট আর্কাইভ বা ডিফল্ট ব্যবহার করা
-pkgs = ["python311", "python311Packages.pip", "gcc", "postgresql_16"]
+nixpkgsArchive = "bc8f8d1be58e8c8383e683a06e1e1e57893fff87"
+# এখানে python311 এর জায়গায় সরাসরি python3 ফুল প্যাকেজটি ব্যবহার করা হচ্ছে
+pkgs = ["python3", "gcc", "postgresql"]
 
 [phases.install]
+# pip নিশ্চিত করতে এবং তারপর ইন্সটল করতে এই কমান্ডগুলো ব্যবহার করুন
 cmds = [
+    "python3 -m ensurepip",
     "python3 -m pip install --upgrade pip",
     "python3 -m pip install -r requirements/production.txt"
 ]
 
 [phases.build]
-# এখানে বিল্ড টাইমে সেটিংস বলে দেওয়া ভালো
 cmds = [
     "DJANGO_SETTINGS_MODULE=config.settings.production python3 manage.py collectstatic --noinput"
 ]
 
 [start]
-cmd = "daphne -b 0.0.0.0 -p 8000 config.asgi:application"
+# মাইগ্রেশন কমান্ডটি স্টার্ট ফেজে রাখা নিরাপদ
+cmd = "python3 manage.py migrate --noinput && daphne -b 0.0.0.0 -p 8000 config.asgi:application"
